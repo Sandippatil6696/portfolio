@@ -1,1 +1,42 @@
+name: Portfolio CI/CD
+
+# on:
+#   push:
+#     branches: [ main ]
+#     paths:
+#       - '.github/workflows/portfolio.yml'
+#       - 'index.html'
+  
+on:
+  workflow_dispatch:
+
+permissions:
+    id-token: write
+    pages: write
+    contents: read
+    
+
+
+jobs: 
+    deploy:
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url:  ${{ steps.deploy-pages.outputs.page_url }}
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            
+            - name: setup  GitHub Pages
+              uses: actions/configure-pages@v4
+
+            - name: upload static artifacts
+              uses: actions/upload-pages-artifact@v4
+              with:
+                path: .
+
+            - name: Deploy to GitHub Pages
+              id: deploy-pages
+              uses: actions/deploy-pages@v4
+
 
